@@ -1,29 +1,40 @@
-#include<iostream>
-#include<iomanip>
 #include<algorithm>
-#include<string>
+#include<iomanip>
+#include<iostream>
 #include<limits>
+#include<string>
+
 #undef max
 
 class Hangman
 {
 private:
-	std::string wordName{ "0" }, wordHint{ "0" }, answer{ "" }, wordType{ "0" }, hanged[5]{ "JOHN","ALEX","MAX","JIMMY","TIM" } ;// Just for fun names
+	 std::string wordName{ "0" }, wordHint{ "0" }, answer{ "" }, wordType{ "0" };
+	 
+	 // Just for fun names
+	 std::string hanged[5]{ "JOHN","ALEX","MAX","JIMMY","TIM" } ;
+	
 	 std::string keyboard = "\t\t  ___________________________________  \n"
-							"\t\t |             KEYBOARD              | \n"
-							"\t\t |-----------------------------------| \n"
-							"\t\t | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | \n"
-							"\t\t |-----------------------------------| \n"
-							"\t\t | a | b | c | d | e | f | g | h | i | \n"
-							"\t\t |-----------------------------------| \n"
-							"\t\t | j | k | l | m | n | o | p | q | r | \n"
-							"\t\t |-----------------------------------| \n"
-							"\t\t | s | t | u | v | w | x | y | z | 0 | \n"
-							"\t\t |-----------------------------------| \n"
-							"\t\t |___________________________________| \n";
-	int countHang{ 0 }; // How many parts of the hanged man
-	char ch{ 0 }; // Input Variable
-	bool active{ 1 }, flag{ 1 }, tag{ 1 };  // check variables
+				"\t\t |             KEYBOARD              | \n"
+				"\t\t |-----------------------------------| \n"
+				"\t\t | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | \n"
+				"\t\t |-----------------------------------| \n"
+				"\t\t | a | b | c | d | e | f | g | h | i | \n"
+				"\t\t |-----------------------------------| \n"
+				"\t\t | j | k | l | m | n | o | p | q | r | \n"
+				"\t\t |-----------------------------------| \n"
+				"\t\t | s | t | u | v | w | x | y | z | 0 | \n"
+				"\t\t |-----------------------------------| \n"
+				"\t\t |___________________________________| \n";
+	
+	// How many parts of the hanged man
+	int countHang{ 0 }; 
+	
+	// Input Variable
+	char ch{ 0 }; 
+	
+	// check variables
+	bool active{ 1 }, flag{ 1 }, tag{ 1 };  
 
 public:
 
@@ -33,8 +44,9 @@ public:
 	// HangBoard() -> the main display board
 	// HangCheck() -> Draws main-body of the Hangman and checks how many left
 	// AgainMenu() -> Final display menu and variable resetting
-
-	bool exit{ 0 };  // Exiting Variable
+	
+	// Exiting Variable
+	bool exit{ 0 };  
 
 	Hangman() {
 
@@ -59,8 +71,10 @@ public:
 
 
 					            -->   ")RAW";
-
-			std::cin >> ch;   // Choice menu with conditions incase of wrong input
+			
+			// Choice menu with conditions incase of wrong input
+			std::cin >> ch;   
+			
 			if (ch == '1') {
 				active = 0;
 				system("cls");
@@ -74,16 +88,18 @@ public:
 			else if (ch == '3') {
 				system("cls");
 				active = 0;
-				exit = 1;//EXIT
+				exit = 1;
+				// EXIT
 			}
 			else {
 				system("cls");
-				//WRONG CHOICE
+				// WRONG CHOICE
 			}
 		}
 	};
 
-	inline void Rules() {
+	
+	void Rules() {
 
 std::cout <<R"RAW(               
 
@@ -114,12 +130,13 @@ std::cout <<R"RAW(
 		}
 		else {
 			system("cls");
-			//WRONG CHOICE
+			// WRONG CHOICE
 		}
 	}
 
 
-	inline void HintWord() {
+	void HintWord() {
+		
 		std::cout << R"RAW(
 
 				  ______                     
@@ -136,14 +153,17 @@ std::cout <<R"RAW(
 			              --> )RAW";
 
 		std::cin >> wordName;
-		std::transform(wordName.begin(), wordName.end(), wordName.begin(), tolower);  // Takes main word input here and converts to lower-case
+		
+		// Takes main word input here and converts to lower-case
+		std::transform(wordName.begin(), wordName.end(), wordName.begin(), tolower);
+		
 		std::cout << std::endl;
 		std::cout << "\t\t *** Enter word type e.g Movie,Food/Drink,Song..etc: \n"
 
 			"\t\t               --> ";
 
 		// Had a problem here as the getline() function wasn't accepting all of the input correctly , which numeric limit seemed to fix here 
-	    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	    	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
 		std::getline(std::cin, wordType);
 		std::cout << std::endl;
@@ -166,7 +186,7 @@ std::cout <<R"RAW(
 
 
 
-	inline void HangBoard() {
+	void HangBoard() {
 
 		int i = 0;
 		active = 1;
@@ -174,53 +194,56 @@ std::cout <<R"RAW(
 		while (active) {
 			HangCheck();
 			std::cout << "\t\t ~TYPE~ \"" << wordType << "\"\t\t  ";
-			//Displaying the word as underscores with spaces
+			
+			// Displaying the word as underscores with spaces
 			for (unsigned i = 0; i < wordName.length(); ++i) {
 
 				std::cout << answer[i] << " ";
 			}
-			//ABC
+			
 			std::cout << "\n\n\t\t ~HINT~ \"" << wordHint << "\"\n\n";
 			std::cout << "\t\t\t\t\t\t\t (*) '#' Shown on the keyboard means it's already tried.";
 			std::cout << "\t\t\t\t\t\t\t\t (*)  Enter '.' to exit.";
 			std::cout << "\n\n" << keyboard;
 
-			// Just wanted to try doing a little fun trick , if they inputted "#" as their first choice of character
+			// Just wanted to try doing a little fun trick , if they entered "#" as their first choice of character
 			// It would automatically show the first letter of the hidden word , if they use "#" as any other input of character
-			// Which isnt the first choice, it wouldn't work :: will mark the trick part with //TRICK comment
+			// Which isnt the first choice, it wouldn't work. I will mark the trick part with a //TRICK comment
 			if (flag == 1) {  
-			
-
+				
 				std::cout << "\t\t     ~X~ -->"; std::cin >> ch;
 			}
+			
+			// TRICK
 			else {
-			//TRICK
+				
 				std::cout << "\t\t ;)  ~O~ -->"; std::cin >> ch;
 			}
-
+			
+			// EXIT INPUT
 			if (ch == '.') {
 				system("cls");
 				Hangman();
 				active = 0;
 				break;
 			}
-			//Converting 
+			
+			// Converting ASCII values
 			if (ch <= 90 && ch >= 65)
 				ch += 32;
 			
-			// incase of input of any of those signs to keep keyboard same outline format , using # sign as letter being taken
+			// incase of input of any of those signs to keep keyboard(variable) same outline format , using # sign as letter being taken
 			if (ch != '|'&& ch != '_' && ch != '-' && keyboard.find(ch) != std::string::npos)
 				keyboard[keyboard.find(ch)] = '#';
 
 			if (ch != '#')
 				tag = 0;
 
-			//TRICK
+			// TRICK
 			if (ch == '#' && flag == 1 && tag == 1) {
 				ch = wordName[0];
 				flag = 0;
 			}
-			//END of KEYBOARD
 
 			// Checking if correct input here with find function
 			i = wordName.find(ch);
@@ -231,6 +254,7 @@ std::cout <<R"RAW(
 			}
 			if (wordName.find(ch) == std::string::npos) {
 				countHang++;
+				
 				// testing the basic alarm bell sound for wrong character input
 				std::cout << "\a";
 			}
@@ -247,7 +271,10 @@ std::cout <<R"RAW(
 		}
 
 	}
-	inline void AgainMenu() {
+	
+	
+	void AgainMenu() {
+		
 		active = 1;
 		while (active) {
 			if (countHang == 6) {
@@ -297,6 +324,7 @@ std::cout <<R"RAW(
 				active = 0;
 
 				system("cls");
+				
 				// Variable resetting
 				countHang = 0;
 				flag = 1;
@@ -323,18 +351,21 @@ std::cout <<R"RAW(
 			else if (ch == '2') {
 				system("cls");
 				active = 0;
-				exit = 1;//EXIT
+				
+				// EXIT
+				exit = 1;
 			}
 			else {
 				system("cls");
-				//WRONG CHOICE
+				// WRONG CHOICE
 			}
 		}
 
 
 	}
 
-	inline void HangCheck() {
+	
+	void HangCheck() {
 
 		if (countHang == 0) {
 			std::cout << "\t\t     ______                     \n"
@@ -406,13 +437,19 @@ std::cout <<R"RAW(
 
 };
 
+
 int main() {
 
+	// To make cout and cin faster by disabling stdio sync
 	std::ios::sync_with_stdio(0);
 
 	Hangman game;
 	if (game.exit == 1) return 0;
 
+	
+	// To keep terminal window open
+	std::cin.clear();
+	std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
 	std::cin.get();
 	return 0;
 }
